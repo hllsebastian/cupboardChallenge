@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
             title: 'Welcome at Cupboard', 
             subtitle: 'Choose an option',
           ), */
-
+          const Spacer(),
           HomeCard(
             title: 'Products Expired',
             icon: FontAwesomeIcons.sadTear,
@@ -47,6 +47,7 @@ class HomePage extends StatelessWidget {
             onPress: (){},
           ),
 
+          const Spacer(),
           CardFooter()
         ],
       ),

@@ -44,7 +44,7 @@ class SideBar extends StatelessWidget {
                 ),
               ),
 
-             PagesCupboard(namePage: 'Brands', routePage: '/'),
+             PagesCupboard(namePage: 'Brands', routePage: 'marcas'),
              const Divider(),
              PagesCupboard(namePage: 'Category', routePage: 'categories'),
              const Divider(),

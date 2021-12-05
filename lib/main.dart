@@ -1,12 +1,26 @@
-import 'package:cupboard/pages/addproducts_page.dart';
-import 'package:cupboard/pages/categories_page.dart';
-import 'package:cupboard/pages/home_page.dart';
-import 'package:cupboard/pages/products_page.dart';
-import 'package:cupboard/services/services.dart';
+import 'dart:io';
+import 'package:cupboard/pages/marcas.dart';
+import 'package:cupboard/services/trademark_service.dart';
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-void main() => runApp(AppState());
+import 'package:cupboard/pages/addproducts_page.dart';
+import 'package:cupboard/pages/trademarks_page.dart';
+import 'package:cupboard/pages/categories_page.dart';
+import 'package:cupboard/pages/home_page.dart';
+import 'package:cupboard/pages/login_page.dart';
+import 'package:cupboard/pages/products_page.dart';
+import 'package:cupboard/services/auth_service.dart';
+import 'package:cupboard/services/client_certificate.dart';
+
+
+
+void main(){
+  runApp(AppState());
+  HttpOverrides.global = MyHttpOverrides(); // Para conectar de manera local con la API
+} 
+
 
 class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
@@ -15,9 +29,10 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CategoriesService()),
-      ], 
-      child: MyCupboard(),
+        ChangeNotifierProvider(lazy: false, create: (_) => AuthService(), ),
+        ChangeNotifierProvider(lazy: false, create: (_) => TrademarkService(), ),
+      ],
+      child: MyCupboard()
     );
   }
 }
@@ -28,12 +43,15 @@ class MyCupboard extends StatelessWidget {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      initialRoute: '/',
+      initialRoute: 'login',
       routes:  {
-        '/'         : (_) => const HomePage(),
+        '/'         : (_) => HomePage(),
         'addProduct': (_) => AddProductsPage(),
-        'categories': (_) => const CategoriesPage(),
-        'products'  : (_) => const ProducstPage(),
+        'brands'    : (_) => TrademarksPage(),
+        'categories': (_) => CategoriesPage(),
+        'login'     : (_) => LoginPage(),
+        'products'  : (_) => ProductsPage(),
+        'marcas'    : (_) => Marcas(),
       },
       theme:  ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.grey[300],
@@ -45,3 +63,5 @@ class MyCupboard extends StatelessWidget {
     );
   }
 }
+
+ 

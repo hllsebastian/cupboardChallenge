@@ -6,7 +6,7 @@ class LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
-        title: const Text('Categories'),
+        title: const Text('Cargando datos'),
       ),
       body: const Center(
         child: CircularProgressIndicator(color: Colors.deepPurple,),        

@@ -1,7 +1,8 @@
-import 'package:cupboard/services/categories_service.dart';
+
+import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({Key? key}) : super(key: key);
@@ -11,166 +12,148 @@ class CategoriesPage extends StatelessWidget {
     return Scaffold(
       endDrawer: SideBar(),
       appBar: AppBar(
-        title: const Text('Categories'),
+        title: const Text('Categories', style: TextStyle(fontSize: 30),),
       ),
       body: ListView.builder(
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) =>
-              const CategorieCard()),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.purple[600],
-        child: const Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'addProduct'),
+        itemBuilder: (_, index) => Container(
+          child: _CategoryName(),
+        )
       ),
-    );
-  }
-}
 
-class CategorieCard extends StatelessWidget {
-  const CategorieCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final categoriesService = Provider.of<CategoriesService>(context);
-
-    //if (categoriesService.isLoading) return LoadingPage();
-
-    return Container(
-      margin: const EdgeInsets.all(10),
-      height: 100,
-      decoration: _cardBorder(),
-      child: Stack(
-        children: const [
-          // TODO: Aca va el nombre de cada categoria
-          CategoryName(name: 'Categories'),
-
-          Positioned(
-              top: 40,
-              left: 30,
-              child: EditeOption(
-                titleOption: 'Edite',
-                iconOption: Icons.edit,
-              )),
-
-          Positioned(
-              top: 40,
-              right: 30,
-              child: EditeOption(
-                titleOption: 'Delete',
-                iconOption: Icons.delete,
-              ))
-        ],
-      ),
-    );
-  }
-
-  BoxDecoration _cardBorder() {
-    return BoxDecoration(
-      color: Colors.grey[100],
-      borderRadius: BorderRadius.circular(20),
-      boxShadow: const [
-        BoxShadow(color: Colors.grey, offset: Offset(0, 7), blurRadius: 10)
+      persistentFooterButtons: const [
+       DownButton(iconOption: Icons.home,  route: '/'),
+       DownButton(iconOption: Icons.add,   route: '/'),
+       DownButton(iconOption: Icons.close, route: '/'),
       ],
-      // TODO: efecto de cirulos en este card
-      /*  gradient: const LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          Color(0xffFDF9FE),
-          Color(0xffA11CDB),
-        ]  
-      ) */
     );
+
+        
+      
   }
 }
 
-class CategoryName extends StatelessWidget {
-  final String name;
-
-  const CategoryName({
+class _CategoryName extends StatelessWidget {
+  const _CategoryName({
     Key? key,
-    required this.name,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 5),
-      width: double.infinity,
-      height: 40,
+      height: 120,
+      //margin: EdgeInsets.all(20),
+
+      padding:    const EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-          //topLeft: Radius.circular(60)
-        ),
-        color: Colors.purple,
-        //borderRadius: BorderRadius.circular(20)
+
       ),
-      child: Column(
-        children: [
-          Text(
-            name,
-            style: const TextStyle(color: Colors.white, fontSize: 25),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class EditeOption extends StatelessWidget {
-  final IconData iconOption;
-  final String titleOption;
-
-  const EditeOption({
-    Key? key,
-    required this.iconOption,
-    required this.titleOption,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.only(top: 8),
-        //color: Colors.red,
-        width: 120,
-        height: 50,
-        child: Column(
+      child: Card(
+        
+        child: Row(
+          //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Icon(iconOption),
-            Text(titleOption),
+            
+           const Padding (
+              padding: EdgeInsets.only(bottom: 35, left: 10),
+              child:   Text('Category Name', style: TextStyle(fontSize: 22),)),
+            Expanded(child: Container()),
+
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                const Text('Edite', style: TextStyle(fontSize: 15),),
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.deepPurple),
+                  onPressed: () => _showForm(context),  
+                )
+              ],),
+            ),
+            Expanded(child: Container()),
+
+            Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Column(children: [
+                const Text('Delete', style: TextStyle(fontSize: 15),),
+                IconButton(onPressed: (){}, icon: const Icon(Icons.delete, color: Colors.deepPurple,))
+              ],),
+            ),
+            Expanded(child: Container()),
           ],
         ),
       ),
     );
   }
+
+    _showForm(BuildContext context){
+      
+      showDialog(
+
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            title: const Text('Editing Category'),
+            content: Form(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.deepPurple,
+                          width: 3,
+                        ) 
+                      ),
+
+                     /*  enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.purple
+                        )
+                      ), */
+                     /*  border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)
+                      ), */
+                      labelStyle: TextStyle(color: Colors.black),
+                      labelText: 'New name',
+                      hintText: 'Insert new category name',
+                    ),
+                  ),
+                  
+                 /*  IconButton(
+                    onPressed: (){}, 
+                    icon:  const Icon(Icons.save, color: Colors.deepPurple)
+                  ) */
+                
+                ],
+                
+              )),
+              
+              actions: [
+                
+                TextButton(
+                  child: const Text('Cancel', style: TextStyle(color: Colors.purpleAccent),),
+                  onPressed: ()=> Navigator.of(context).pop(  ),
+                ),
+                SizedBox(width: 60,),
+                
+                TextButton(
+                  child: const Text('Save', style: TextStyle(color: Colors.purpleAccent),),
+                  onPressed: ()=> Navigator.of(context).pop(  ),
+                ), 
+
+                SizedBox(width: 30,),
+              ],
+
+          );
+        }
+
+      );
+       
+    
+    }
+    
 }
 
-
-
-
-/* class _BackGroundImage extends StatelessWidget {
-  const _BackGroundImage({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        //color: Colors.red,
-        width: double.infinity,
-        height: 100,
-        child:const FadeInImage(
-          fit: BoxFit.fitHeight,
-          placeholder: AssetImage('assets/purple-loading.gif'),
-          image:  AssetImage('assets/food-preview.png'),
-        ),
-      ),
-    ); 
-  }
-} */

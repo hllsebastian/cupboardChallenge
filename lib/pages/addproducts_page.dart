@@ -14,25 +14,27 @@ class AddProductsPage extends StatelessWidget {
         backgroundColor: Colors.purple,
       ),
       body: BoxForm(
-        child: Column(
-          children: [
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
 
-            const SizedBox(height: 100,),
+              const SizedBox(height: 100,),
 
-            FormCard(child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 10,), 
+              FormCard(child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10,), 
 
-                  Text('New Product', style: Theme.of(context).textTheme.headline4,),
+                    Text('New Product', style: Theme.of(context).textTheme.headline4,),
 
-                  _ProductForm(titlefield: 'Product Name',),
-                  _ProductForm(titlefield: 'Brand'),
-                  _ProductForm(titlefield: 'Expiration date'),
-                ],
-              ),
-            ),)
-          ],
+                    _ProductForm(titlefield: 'Product Name',),
+                    _ProductForm(titlefield: 'Brand'),
+                    _ProductForm(titlefield: 'Expiration date'),
+                  ],
+                ),
+              ),)
+            ],
+          ),
         ),
       ),
     );

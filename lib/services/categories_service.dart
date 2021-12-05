@@ -5,7 +5,7 @@ import 'package:cupboard/models/category.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesService extends ChangeNotifier {
-  final String _baseUrl = 'localhost:5001/api';
+  final String _baseUrl = 'localhost:5001';
   final List<Category> categories = [];
   bool isLoading = true;
 
