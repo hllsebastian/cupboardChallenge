@@ -4,11 +4,13 @@ import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 
 class AddProductsPage extends StatelessWidget {
+  const AddProductsPage({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: SideBar(),
+      endDrawer: const SideBar(),
       appBar: AppBar(
         title: const Text('Product'),
         backgroundColor: Colors.purple,
@@ -27,9 +29,9 @@ class AddProductsPage extends StatelessWidget {
 
                     Text('New Product', style: Theme.of(context).textTheme.headline4,),
 
-                    _ProductForm(titlefield: 'Product Name',),
-                    _ProductForm(titlefield: 'Brand'),
-                    _ProductForm(titlefield: 'Expiration date'),
+                    const _ProductForm(titlefield: 'Product Name',),
+                    const _ProductForm(titlefield: 'Brand'),
+                    const _ProductForm(titlefield: 'Expiration date'),
                   ],
                 ),
               ),)
@@ -47,7 +49,7 @@ class _ProductForm extends StatelessWidget {
   final String titlefield;
   final String? datafield;
 
-  _ProductForm({
+  const _ProductForm({
     Key? key, 
     required this.titlefield, 
     this.datafield
@@ -55,6 +57,7 @@ class _ProductForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Form(
         child: Column(

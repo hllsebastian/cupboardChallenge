@@ -2,7 +2,7 @@ import 'package:cupboard/models/trademarks.dart';
 import 'package:flutter/material.dart';
 
 class TrademarkProvider extends ChangeNotifier {
-  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  GlobalKey<FormState> formKey =  GlobalKey<FormState>();
 
   late Trademark mark;
 

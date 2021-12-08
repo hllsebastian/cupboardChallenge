@@ -10,12 +10,12 @@ class CategoriesService extends ChangeNotifier {
   bool isLoading = true;
 
   CategoriesService() {
-    this.loadProducts();
+    loadProducts();
   }
 
   Future<List<Category>> loadProducts() async {
 
-    this.isLoading = true;
+    isLoading = true;
     notifyListeners();
 
     final url = Uri.https(_baseUrl, 'categories.json');
@@ -26,12 +26,12 @@ class CategoriesService extends ChangeNotifier {
     categoriesMap.forEach((key, value) {
       final tempCategory = Category.fromMap(value);
       tempCategory.idcategory = key;
-      this.categories.add(tempCategory);
+      categories.add(tempCategory);
     });
 
-    this.isLoading = false;
+    isLoading = false;
     notifyListeners();
 
-    return this.categories;
+    return categories;
   }
 }

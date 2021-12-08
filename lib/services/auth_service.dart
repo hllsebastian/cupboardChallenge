@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class AuthService extends ChangeNotifier {
   
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   Future<String?> createUser(String nombreCompleto, String userName,
       String email, String password) async {

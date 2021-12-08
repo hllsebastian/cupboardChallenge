@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: SideBar(),
+      endDrawer: const SideBar(),
       appBar: AppBar(
         title: const Text('Welcome to Cupboard'),
         backgroundColor: Colors.purple,
@@ -43,12 +43,12 @@ class HomePage extends StatelessWidget {
             title: 'Reports',
             icon: FontAwesomeIcons.smileWink,
             color1: const Color(0xff59CD42),
-            color2: const Color(0xffF2EB014),
+            color2: const Color(0xff2EB014),
             onPress: (){},
           ),
 
           const Spacer(),
-          CardFooter()
+          const CardFooter()
         ],
       ),
     );

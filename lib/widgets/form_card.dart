@@ -14,10 +14,10 @@ class FormCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         width: double.infinity,
         decoration: cardFormdecoration(),
-        child: this.child,
+        child: child,
       ),
     );
   }

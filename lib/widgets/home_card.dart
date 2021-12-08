@@ -10,13 +10,13 @@ class HomeCard extends StatelessWidget {
   final Color color2;
   final Function onPress;
 
-  HomeCard({
+   const HomeCard({Key? key, 
     this.icon = FontAwesomeIcons.nutritionix, 
     required this.title, 
     this.color1 = Colors.grey,
     this.color2 = Colors.blueGrey,
     required this.onPress
-  });
+  }) : super(key: key);
 
 
   @override
@@ -31,7 +31,7 @@ class HomeCard extends StatelessWidget {
             const SizedBox(height: 80, width: 40),
             FaIcon(icon, size: 40, color: Colors.white,),
             const SizedBox(width: 20),
-            Expanded(child: Text(this.title, style: const TextStyle(color: Colors.white, fontSize: 15),)),
+            Expanded(child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 15),)),
             /* FaIcon(FontAwesomeIcons.chevronRight, size: 10, color: Colors.white,),
             SizedBox(width: 60), */
          ],

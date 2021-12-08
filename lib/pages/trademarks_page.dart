@@ -1,175 +1,122 @@
 import 'package:cupboard/models/trademarks.dart';
-import 'package:cupboard/pages/loading_page.dart';
-import 'package:cupboard/providers/trademark_provider.dart';
 import 'package:cupboard/services/trademark_service.dart';
-import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class TrademarksPage extends StatelessWidget {
-  const TrademarksPage({Key? key}) : super(key: key);
+
+
+class TradeMarksPage extends StatelessWidget {
+  const TradeMarksPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final trademarkService = Provider.of<TrademarkService>(context);
 
-    //if (trademarkService.isLoading) return LoadingPage();
+    final markService = Provider.of<TrademarkService>(context);
 
     return Scaffold(
-      endDrawer: SideBar(),
       appBar: AppBar(
-        title: const Text('Brands', style: TextStyle(fontSize: 30),),
+        title: const Text('Marcas'),
       ),
-      body: ListView.builder(
-          itemCount: trademarkService.trademarkslist.length,
-          itemBuilder: (context, index) => Container(
-              color: Colors.black,
-              child: _TrademarkProperties(
-                  trademark: trademarkService.trademarkslist[index])
-          )),
-      persistentFooterButtons: const [
-        DownButton(iconOption: Icons.home, route: '/'),
-        DownButton(iconOption: Icons.add, route: '/'),
-        DownButton(iconOption: Icons.close, route: '/'),
-      ],
+      drawer: const SideBar(),
+      body: Container(
+        color: Colors.black12,
+        child: ListView.builder(
+            itemCount: markService.trademarkslist.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _CardContainer(
+                mark: markService.trademarkslist[index],
+              );
+            }),
+      ),
+      //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.indigo[600],
+          onPressed: () => {
+                markService.selectedTrademark = Trademark(mark: ''),
+                Navigator.pushNamed(context, '/')
+              }),
     );
   }
 }
 
-class _TrademarkProperties extends StatelessWidget {
-  final Trademark trademark;
+class _CardContainer extends StatelessWidget {
+  final Trademark mark;
 
-  const _TrademarkProperties({
-    Key? key,
-    required this.trademark,
-  }) : super(key: key);
+  const _CardContainer({Key? key, required this.mark}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    //final trademarkService = Provider.of<TrademarkService>(context);
-    //final index = trademarkService.trademarkslist.indexWhere((x) => x.idTrademark == trademark.idTrademark);
-
-    return Container(
-      height: 120,
-      //margin: EdgeInsets.all(20),
-
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(),
-      child: Card(
-        child: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+    final markService = Provider.of<TrademarkService>(context);
+    final index = markService.trademarkslist.indexWhere((e) => e.idTrademark == mark.idTrademark);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        margin: const EdgeInsets.only(top: 20, bottom: 20),
+        height: 120,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-                padding: const EdgeInsets.only(bottom: 35, left: 10),
-                child: Text(
-                  '${trademark.mark}',
-                  style: const TextStyle(fontSize: 22),
-                )),
-            Expanded(child: Container()),
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Column(
-                children: [
-                  const Text(
-                    'Edite',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.deepPurple),
-                    onPressed: () => _showForm(context),
-                  )
-                ],
-              ),
+            Text(
+              'Name: ${mark.mark}',
+              style: const TextStyle(fontSize: 25),
+              maxLines: 2,
             ),
-            Expanded(child: Container()),
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Column(
-                children: [
-                  const Text(
-                    'Delete',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.deepPurple,
-                      ))
-                ],
-              ),
+            const SizedBox(
+              height: 10,
             ),
-            Expanded(child: Container()),
+            Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    markService.selectedTrademark = markService.trademarkslist[index];
+                    Navigator.pushNamed(context, '/');
+                  },
+                ),
+                const SizedBox(width: 10,),
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red.withOpacity(0.8),),
+                  onPressed: () {
+                    final dialog = AlertDialog(
+                        title: Text('¿Are you sure to delete ${mark.mark}?'),
+                        content: const Text('Delete'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('No')),
+                          TextButton(
+                            child: const  Text('Yes, Delete'),
+                            onPressed: () async {
+                              await markService
+                                  .deleteMark('${mark.idTrademark}');
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ]);
+
+                    showDialog(context: context, builder: (_) => dialog);
+                  },
+                )
+              ],
+            ),
           ],
         ),
+        decoration: _cardDecoration(),
       ),
     );
   }
 
-  _showForm(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            title: const Text('Editing Brand'),
-            content: Form(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.deepPurple,
-                      width: 3,
-                    )),
-
-                    /*  enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.purple
-                        )
-                      ), */
-                    /*  border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ), */
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: 'New name',
-                    hintText: 'Insert new brand name',
-                  ),
-                ),
-
-                /*  IconButton(
-                    onPressed: (){}, 
-                    icon:  const Icon(Icons.save, color: Colors.deepPurple)
-                  ) */
-              ],
-            )),
-            actions: [
-              TextButton(
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.purpleAccent),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              const SizedBox(
-                width: 60,
-              ),
-              TextButton(
-                child: const Text(
-                  'Save',
-                  style: TextStyle(color: Colors.purpleAccent),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-            ],
-          );
-        });
-  }
+  BoxDecoration _cardDecoration() => BoxDecoration(
+          color: Colors.white70,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black12, offset: Offset(0, 8), blurRadius: 10)
+          ]);
 }

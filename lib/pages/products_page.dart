@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +12,13 @@ class ProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: SideBar(),
+      endDrawer: const SideBar(),
       appBar: AppBar(
         title: const Text('Products', style: TextStyle(fontSize: 30),),
       ),
-      body: ListView.builder(
+      body: ListView.builder (
         itemBuilder: (_, index) => Container(
-          child: _CategoryName(),
+          child: const _CategoryName(),
         )
       ),
 
@@ -56,7 +58,7 @@ class _CategoryName extends StatelessWidget {
             Expanded(child: Container()),
 
             Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: [
                 const Text('Edite', style: TextStyle(fontSize: 15),),
@@ -69,7 +71,7 @@ class _CategoryName extends StatelessWidget {
             Expanded(child: Container()),
 
             Padding(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               child: Column(children: [
                 const Text('Delete', style: TextStyle(fontSize: 15),),
                 IconButton(onPressed: (){}, icon: const Icon(Icons.delete, color: Colors.deepPurple,))
@@ -134,14 +136,14 @@ class _CategoryName extends StatelessWidget {
                   child: const Text('Cancel', style: TextStyle(color: Colors.purpleAccent),),
                   onPressed: ()=> Navigator.of(context).pop(  ),
                 ),
-                SizedBox(width: 60,),
+                const SizedBox(width: 60,),
                 
                 TextButton(
                   child: const Text('Save', style: TextStyle(color: Colors.purpleAccent),),
                   onPressed: ()=> Navigator.of(context).pop(  ),
                 ), 
 
-                SizedBox(width: 30,),
+                const SizedBox(width: 30,),
               ],
 
           );

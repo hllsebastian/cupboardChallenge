@@ -11,7 +11,7 @@ class LoginPage extends StatelessWidget {
       create: (_) => Logincontroller(),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: _backGroundLogin(),
           /* width: double.infinity,
           height: double.infinity, */
@@ -21,14 +21,14 @@ class LoginPage extends StatelessWidget {
               children: [
 
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                     labelText: 'Email'
                   ),
                 ),
 
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
                     labelText: 'Password'
                   ),

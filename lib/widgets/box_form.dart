@@ -13,13 +13,13 @@ class BoxForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: double.infinity,
       child: Stack(
         children: [
           _PurpleBox(),
-          this.child
+          child
         ],
       )
 
@@ -38,7 +38,7 @@ class _PurpleBox extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: sizeScreen.height * 0.4,
-      decoration: PurpleDecoration(),
+      decoration: _purpleDecoration(),
       child: Stack(
         children: [
           Positioned(child: _Bubble(), top: 90, left: 100,),
@@ -53,7 +53,7 @@ class _PurpleBox extends StatelessWidget {
     );
   }
 
-  BoxDecoration PurpleDecoration() => const BoxDecoration(
+  BoxDecoration _purpleDecoration() => const BoxDecoration(
     gradient: LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,

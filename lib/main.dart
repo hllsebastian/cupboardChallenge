@@ -17,6 +17,7 @@ import 'package:cupboard/services/client_certificate.dart';
 
 
 void main(){
+  // ignore: prefer_const_constructors
   runApp(AppState());
   HttpOverrides.global = MyHttpOverrides(); // Para conectar de manera local con la API
 } 
@@ -30,14 +31,16 @@ class AppState extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(lazy: false, create: (_) => AuthService(), ),
-        ChangeNotifierProvider(lazy: false, create: (_) => TrademarkService(), ),
+        ChangeNotifierProvider(lazy: true, create: (_) => TrademarkService(), ),
       ],
-      child: MyCupboard()
+      child: const MyCupboard()
     );
   }
 }
 
 class MyCupboard extends StatelessWidget {
+  const MyCupboard({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
@@ -45,13 +48,13 @@ class MyCupboard extends StatelessWidget {
       title: 'Material App',
       initialRoute: 'login',
       routes:  {
-        '/'         : (_) => HomePage(),
-        'addProduct': (_) => AddProductsPage(),
-        'brands'    : (_) => TrademarksPage(),
-        'categories': (_) => CategoriesPage(),
-        'login'     : (_) => LoginPage(),
-        'products'  : (_) => ProductsPage(),
-        'marcas'    : (_) => Marcas(),
+        '/'         : (_) => const HomePage(),
+        'addProduct': (_) => const AddProductsPage(),
+        'brands'    : (_) => const TradeMarksPage(),
+        'categories': (_) => const CategoriesPage(),
+        'login'     : (_) => const LoginPage(),
+        'products'  : (_) => const ProductsPage(),
+        'marcas'    : (_) => const Marcas(),
       },
       theme:  ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.grey[300],

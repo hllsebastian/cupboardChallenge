@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 // No la estoy usando. Iba a funcionar como un Appbar
 
@@ -13,13 +12,13 @@ class CardHeader extends StatelessWidget {
 
   final Color whiteColor = Colors.white.withOpacity(0.7);
 
-   CardHeader({
+  CardHeader({Key? key, 
     required this.icon, 
     required this.title, 
     required this.subtitle, 
     this.color1, 
     this.color2
-  });
+  }) : super(key: key);
 
 
   @override
@@ -38,11 +37,11 @@ class CardHeader extends StatelessWidget {
             children: [
             //const SizedBox(height: 50,),
         
-            Text(title, style: TextStyle(fontSize: 20, color: Colors.white)),
+            Text(title, style: const TextStyle(fontSize: 20, color: Colors.white)),
         
             const SizedBox(height: 20),
         
-            Text(subtitle, style: TextStyle(fontSize: 20, color: Colors.white)),
+            Text(subtitle, style: const TextStyle(fontSize: 20, color: Colors.white)),
           ]),
         ),
 

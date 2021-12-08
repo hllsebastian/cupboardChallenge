@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 
 class SideBar extends StatelessWidget {
+  const SideBar({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +41,22 @@ class SideBar extends StatelessWidget {
                     ),
                     child: Container(
                       alignment: Alignment.bottomCenter,
-                      child: Text('Choose an option', style: TextStyle(fontSize: 20), )
+                      child: const Text('Choose an option', style: TextStyle(fontSize: 20), )
                     )
                 ),
               ),
 
-             PagesCupboard(namePage: 'Brands', routePage: 'marcas'),
+             const PagesCupboard(namePage: 'Brands', routePage: 'marcas'),
              const Divider(),
-             PagesCupboard(namePage: 'Category', routePage: 'categories'),
+             const PagesCupboard(namePage: 'Category', routePage: 'categories'),
              const Divider(),
-             PagesCupboard(namePage: 'Cupboard', routePage: '/'),
+             const PagesCupboard(namePage: 'Cupboard', routePage: '/'),
              const Divider(),
-             PagesCupboard(namePage: 'Products', routePage: 'products'),
+             const PagesCupboard(namePage: 'Products', routePage: 'products'),
              const Divider(),
-             PagesCupboard(namePage: 'Home', routePage: '/'),
+             const PagesCupboard(namePage: 'Home', routePage: '/'),
              const Divider(),
-             PagesCupboard(namePage: 'Close', routePage: '/'),
+             const PagesCupboard(namePage: 'Close', routePage: '/'),
 
             ],
           ),
@@ -69,10 +71,10 @@ class PagesCupboard extends StatelessWidget {
   final String namePage; 
   final String routePage;
 
-  PagesCupboard({
+  const PagesCupboard({Key? key, 
     required this.namePage, 
     required this.routePage
-    });
+    }) : super(key: key);
 
 
   @override
@@ -80,7 +82,7 @@ class PagesCupboard extends StatelessWidget {
 
 
     return  ListTile(
-       title: Text(namePage, style: TextStyle(fontSize: 17)),
+       title: Text(namePage, style: const TextStyle(fontSize: 17)),
        onTap: () => Navigator.popAndPushNamed(context, routePage)
      );
     }
