@@ -1,7 +1,11 @@
 
+import 'package:cupboard/models/category_model.dart';
+import 'package:cupboard/services/categories_service.dart';
 import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class CategoriesPage extends StatelessWidget {
@@ -9,19 +13,26 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final categoryService = Provider.of<CategoriesService>(context);
+
     return Scaffold(
-      endDrawer: const SideBar(),
-      appBar: AppBar(
+        endDrawer: const SideBar(),
+        appBar: AppBar(
         title: const Text('Categories', style: TextStyle(fontSize: 30),),
       ),
       body: ListView.builder(
-        itemBuilder: (_, index) => const _CategoryName()
+        itemCount: categoryService.categorylist.length,
+        itemBuilder: (_, index) => _CategoryName(
+          category: categoryService.categorylist[index],
+
+        )
       ),
 
       persistentFooterButtons: const [
        DownButton(iconOption: Icons.home,  route: '/'),
-       DownButton(iconOption: Icons.add,   route: '/'),
-       DownButton(iconOption: Icons.close, route: '/'),
+       DownButton(iconOption: Icons.add,   route: 'addCategory'),
+       DownButton(iconOption: Icons.close, route: 'login'),
       ],
     );
 
@@ -31,12 +42,17 @@ class CategoriesPage extends StatelessWidget {
 }
 
 class _CategoryName extends StatelessWidget {
-  const _CategoryName({
-    Key? key,
-  }) : super(key: key);
+  
+  final CategoryModel category;
+  
+  const _CategoryName({Key? key, required this.category,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final categoryService = Provider.of<CategoriesService>(context);
+    final index = categoryService.categorylist.indexWhere((x) => x.idcategory == category.idcategory);
+
     return Container(
       height: 120,
       //margin: EdgeInsets.all(20),
@@ -48,12 +64,11 @@ class _CategoryName extends StatelessWidget {
       child: Card(
         
         child: Row(
-          //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             
-           const Padding (
-              padding: EdgeInsets.only(bottom: 35, left: 10),
-              child:   Text('Category Name', style: TextStyle(fontSize: 22),)),
+            Padding (
+              padding: const EdgeInsets.only(bottom: 35, left: 10),
+              child:   Text(category.name!, style: const TextStyle(fontSize: 22),)),
             Expanded(child: Container()),
 
             Padding(

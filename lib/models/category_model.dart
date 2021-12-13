@@ -1,11 +1,8 @@
-// To parse this JSON data, do
-//
-//     final category = categoryFromMap(jsonString);
-
 import 'dart:convert';
 
-class Category {
-    Category({
+class CategoryModel {
+
+    CategoryModel({
         this.idcategory,
         this.name,
     });
@@ -13,11 +10,11 @@ class Category {
     String? idcategory;
     String? name;
 
-    factory Category.fromJson(String str) => Category.fromMap(json.decode(str));
+    factory CategoryModel.fromJson(String str) => CategoryModel.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory Category.fromMap(Map<String, dynamic> json) => Category(
+    factory CategoryModel.fromMap(Map<String, dynamic> json) => CategoryModel(
         idcategory: json["idcategory"],
         name: json["name"],
     );

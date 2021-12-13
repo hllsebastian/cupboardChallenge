@@ -1,5 +1,6 @@
 import 'package:cupboard/models/trademarks.dart';
 import 'package:cupboard/services/trademark_service.dart';
+import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,45 +9,45 @@ class Marcas extends StatelessWidget {
   const Marcas({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     final markService = Provider.of<TrademarkService>(context);
+
     return Scaffold(
+      endDrawer: const SideBar(),
       appBar: AppBar(
-        title: const Text('Marcas'),
+      title: const Text('Marcas', style: TextStyle(fontSize: 30),),
       ),
-      drawer: const SideBar(),
-      body: Container(
-        color: Colors.black12,
-        child: ListView.builder(
-            itemCount: markService.trademarkslist.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _CardContainer(
-                mark: markService.trademarkslist[index],
-              );
-            }),
-      ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.indigo[600],
-          onPressed: () => {
-                markService.selectedTrademark = Trademark(mark: ''),
-                Navigator.pushNamed(context, 'detailmark')
-              }),
+      body: ListView.builder(
+          itemCount: markService.trademarkslist.length,
+          itemBuilder: (_, index) {
+            return _CardContainer(
+              mark: markService.trademarkslist[index],
+            );
+          }),
+
+      persistentFooterButtons: const [
+       DownButton(iconOption: Icons.home,  route: '/'),
+       DownButton(iconOption: Icons.add,   route: '/'),
+       DownButton(iconOption: Icons.close, route: '/'),
+      ],
+
     );
   }
 }
 
 class _CardContainer extends StatelessWidget {
+
   final Trademark mark;
 
   const _CardContainer({Key? key, required this.mark}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     final markService = Provider.of<TrademarkService>(context);
-    /* final index =
-        markService.trademarkslist.indexWhere((e) => e.idTrademark == mark.idTrademark); */
+    final index = markService.trademarkslist.indexWhere((e) => e.idTrademark == mark.idTrademark); 
+    
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
@@ -57,23 +58,23 @@ class _CardContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Name: ${mark.mark}',
-              style: const TextStyle(fontSize: 25),
-              maxLines: 2,
-            ),
+
+            Text(mark.mark, style: const TextStyle(fontSize: 25), maxLines: 2,),
             const SizedBox(height: 10,),
-            /* Row(
+
+             Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () {
-                    markService.selectedMark = markService.marks[index];
+                    markService.selectedTrademark = markService.trademarkslist[index];
                     Navigator.pushNamed(context, 'detailmark');
                   },
-                ), */
+                 )]
+                ),
+                
                 const SizedBox(width: 10,),
-                IconButton(
+              /*   IconButton(
                   icon: Icon(
                     Icons.delete,
                     color: Colors.red.withOpacity(0.8),
@@ -100,7 +101,7 @@ class _CardContainer extends StatelessWidget {
 
                     showDialog(context: context, builder: (_) => dialog);
                   },
-                )
+                ) */
               ],
             ),
           

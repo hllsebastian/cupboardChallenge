@@ -13,6 +13,7 @@ class TrademarkService extends ChangeNotifier {
   final List<Trademark> trademarkslist = [];
   late Trademark selectedTrademark;
   bool isLoading = true;
+  bool isSaving = true;
 
 
   TrademarkService() {
@@ -49,6 +50,8 @@ class TrademarkService extends ChangeNotifier {
 
   Future saveOrCreateMark(Trademark trademark) async {
       // creando
+    isSaving = true;
+    notifyListeners();
     if (trademark.idTrademark == null) {
       await createMark(trademark);
     } else {
@@ -58,8 +61,8 @@ class TrademarkService extends ChangeNotifier {
   }
 
   Future<String?> createMark(Trademark trademark) async {
-    final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks');
 
+    final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks');
     final token = await storage.read(key: 'token');
 
     Map<String, String> requestHeaders = {
@@ -67,12 +70,11 @@ class TrademarkService extends ChangeNotifier {
       'Accept': 'application/json',
       'Authorization': 'Bearer $token'
     };
+    
     http.Response resp = await http.post(url,
         headers: requestHeaders, body: jsonEncode(trademark.toJson()));
-
-    final decodedData = json.decode(resp.body);
-
-    trademark.idTrademark = decodedData['name'];
+    final response = json.decode(resp.body);
+    trademark.idTrademark = response['name'];
 
     trademarkslist.add(trademark);
     notifyListeners();
@@ -82,6 +84,7 @@ class TrademarkService extends ChangeNotifier {
 
 
   Future<String?> updateMark(Trademark trademark) async {
+
     final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks/${trademark.idTrademark}');
     final token = await storage.read(key: 'token');
 
@@ -92,19 +95,17 @@ class TrademarkService extends ChangeNotifier {
     };
 
     
-    final resp = await http.put(url, headers: requestHeaders, body: jsonEncode(trademark.toJson()));
-
+    await http.put(url, headers: requestHeaders, body: jsonEncode(trademark.toJson()));
     final index = trademarkslist.indexWhere((e) => e.idTrademark == trademark.idTrademark);
     trademarkslist[index] = trademark;
 
     notifyListeners();
-
     return trademark.idTrademark!;
   }
 
-  Future<String> deleteMark(String idTrademarks) async {
-    final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks/' + idTrademarks);
+  Future<String> deleteTradeMark(String idTradeMark) async {
 
+    final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks/$idTradeMark');
     final token = await storage.read(key: 'token');
 
     Map<String, String> requestHeaders = {
@@ -113,11 +114,10 @@ class TrademarkService extends ChangeNotifier {
       'Authorization': 'Bearer $token'
     };
 
-    final resp = await http.delete(url, headers: requestHeaders);
-
+    await http.delete(url, headers: requestHeaders);
     notifyListeners();
     trademarkslist.clear();
     loadTrademarks();
-    return idTrademarks;
+    return idTradeMark;
   }
 }
