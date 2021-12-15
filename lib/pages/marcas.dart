@@ -1,4 +1,4 @@
-import 'package:cupboard/models/trademarks.dart';
+/* import 'package:cupboard/models/trademark_model.dart';
 import 'package:cupboard/services/trademark_service.dart';
 import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
@@ -213,4 +213,4 @@ class VistaMarcas extends StatelessWidget {
     );
   }
 }
- */
+ */ */

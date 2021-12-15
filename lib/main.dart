@@ -1,21 +1,23 @@
-import 'dart:io';
-import 'package:cupboard/pages/form_pages/trade_mark_form.dart';
-import 'package:cupboard/pages/form_pages/category_form.dart';
-import 'package:cupboard/pages/marcas.dart';
-import 'package:cupboard/services/categories_service.dart';
-import 'package:cupboard/services/trademark_service.dart';
+import 'package:cupboard/services/cupboard_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import 'package:provider/provider.dart';
 
-import 'package:cupboard/pages/addproducts_page.dart';
-import 'package:cupboard/pages/trademarks_page.dart';
 import 'package:cupboard/pages/categories_page.dart';
+import 'package:cupboard/pages/cupboard_page.dart';
+import 'package:cupboard/pages/form_pages/cupboard_form.dart';
+import 'package:cupboard/pages/form_pages/trade_mark_form.dart';
+import 'package:cupboard/pages/form_pages/category_form.dart';
+import 'package:cupboard/pages/form_pages/addproducts_page.dart';
 import 'package:cupboard/pages/home_page.dart';
 import 'package:cupboard/pages/login_page.dart';
 import 'package:cupboard/pages/products_page.dart';
+import 'package:cupboard/pages/trademarks_page.dart';
 import 'package:cupboard/services/auth_service.dart';
-
+import 'package:cupboard/services/category_service.dart';
+import 'package:cupboard/services/product_services.dart';
+import 'package:cupboard/services/trademark_service.dart';
 
 
 void main(){
@@ -43,7 +45,9 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService(), ),
         ChangeNotifierProvider(create: (_) => TrademarkService(), ),
-        ChangeNotifierProvider(create: (_) => CategoriesService(), ),
+        ChangeNotifierProvider(create: (_) => CategoryService(), ),
+        ChangeNotifierProvider(create: (_) => ProductService(), ),
+        ChangeNotifierProvider(create: (_) => CupboardService(), ),
       ],
       child: const MyCupboard()
     );
@@ -62,13 +66,15 @@ class MyCupboard extends StatelessWidget {
       routes:  {
         '/'          : (_) => const HomePage(),
         'addBrand'   : (_) => const TradeMarkForm(),
-        'addCategory': (_) => const FormCategory(),
+        'addCategory': (_) => const CategoryForm(),
+        'addCupboard': (_) => const CupboardForm(),
         'addProduct' : (_) => const AddProductsPage(),
         'brands'     : (_) => const TrademarksPage(),
         'categories' : (_) => const CategoriesPage(),
+        'cupboard'   : (_) => const CupboardPage(),
         'login'      : (_) => const LoginPage(),
         'products'   : (_) => const ProductsPage(),
-        'marcas'     : (_) => const Marcas(),
+        //'marcas'     : (_) => const Marcas(),
       },
       theme:  ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.grey[300],

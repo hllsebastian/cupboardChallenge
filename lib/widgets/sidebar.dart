@@ -41,22 +41,22 @@ class SideBar extends StatelessWidget {
                     ),
                     child: Container(
                       alignment: Alignment.bottomCenter,
-                      child: const Text('Choose an option', style: TextStyle(fontSize: 20), )
+                      child: const Text('Elige una opción', style: TextStyle(fontSize: 20), )
                     )
                 ),
               ),
 
-             const PagesCupboard(namePage: 'Brands', routePage: 'brands'),
+             const PagesCupboard(namePage: 'Marcas', routePage: 'brands'),
              const Divider(),
-             const PagesCupboard(namePage: 'Category', routePage: 'categories'),
+             const PagesCupboard(namePage: 'Categorias', routePage: 'categories'),
              const Divider(),
-             const PagesCupboard(namePage: 'Cupboard', routePage: '/'),
+             const PagesCupboard(namePage: 'Cupboard', routePage: 'cupboard'),
              const Divider(),
-             const PagesCupboard(namePage: 'Products', routePage: 'products'),
+             const PagesCupboard(namePage: 'Productos', routePage: 'products'),
              const Divider(),
              const PagesCupboard(namePage: 'Home', routePage: '/'),
              const Divider(),
-             const PagesCupboard(namePage: 'Close', routePage: '/'),
+             const PagesCupboard(namePage: 'Cerrar', routePage: '/'),
 
             ],
           ),

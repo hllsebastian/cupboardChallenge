@@ -4,23 +4,26 @@ class CategoryModel {
 
     CategoryModel({
         this.idcategory,
-        this.name,
+        required this.name,
     });
 
     String? idcategory;
-    String? name;
+    String name;
 
     factory CategoryModel.fromJson(String str) => CategoryModel.fromMap(json.decode(str));
-
-    String toJson() => json.encode(toMap());
 
     factory CategoryModel.fromMap(Map<String, dynamic> json) => CategoryModel(
         idcategory: json["idcategory"],
         name: json["name"],
     );
 
-    Map<String, dynamic> toMap() => {
-        "idcategory": idcategory,
+    Map<String, dynamic> toJson() => {
+       // "idcategory": idcategory,
         "name": name,
     };
+
+    CategoryModel update() => CategoryModel(
+      idcategory: idcategory,
+      name: name
+    );
 }

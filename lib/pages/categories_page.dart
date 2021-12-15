@@ -1,6 +1,7 @@
 
 import 'package:cupboard/models/category_model.dart';
-import 'package:cupboard/services/categories_service.dart';
+import 'package:cupboard/pages/loading_page.dart';
+import 'package:cupboard/services/category_service.dart';
 import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
 import 'package:flutter/foundation.dart';
@@ -9,12 +10,14 @@ import 'package:provider/provider.dart';
 
 
 class CategoriesPage extends StatelessWidget {
+  
   const CategoriesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    final categoryService = Provider.of<CategoriesService>(context);
+    final categoryService = Provider.of<CategoryService>(context);
+    if(categoryService.isLoading) return const LoadingPage();
 
     return Scaffold(
         endDrawer: const SideBar(),
@@ -25,14 +28,24 @@ class CategoriesPage extends StatelessWidget {
         itemCount: categoryService.categorylist.length,
         itemBuilder: (_, index) => _CategoryName(
           category: categoryService.categorylist[index],
-
         )
       ),
 
-      persistentFooterButtons: const [
-       DownButton(iconOption: Icons.home,  route: '/'),
-       DownButton(iconOption: Icons.add,   route: 'addCategory'),
-       DownButton(iconOption: Icons.close, route: 'login'),
+      persistentFooterButtons:  [
+       const DownButton(iconOption: Icons.home,  route: '/'),
+       Padding(
+         padding: const EdgeInsets.only(left: 25),
+         child: IconButton(
+          iconSize: 37,
+          icon: const Icon(Icons.add), 
+           onPressed: () {
+             categoryService.selectedCategory = CategoryModel(name: '');
+             Navigator.pushNamed(context, 'addCategory');
+           }, 
+         ),
+       ),
+       //DownButton(iconOption: Icons.add,   route: 'addCategory'),
+       const DownButton(iconOption: Icons.close, route: 'login'),
       ],
     );
 
@@ -50,7 +63,7 @@ class _CategoryName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final categoryService = Provider.of<CategoriesService>(context);
+    final categoryService = Provider.of<CategoryService>(context);
     final index = categoryService.categorylist.indexWhere((x) => x.idcategory == category.idcategory);
 
     return Container(
@@ -68,17 +81,20 @@ class _CategoryName extends StatelessWidget {
             
             Padding (
               padding: const EdgeInsets.only(bottom: 35, left: 10),
-              child:   Text(category.name!, style: const TextStyle(fontSize: 22),)),
+              child:   Text(category.name, style: const TextStyle(fontSize: 22),)),
             Expanded(child: Container()),
 
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: [
-                const Text('Edite', style: TextStyle(fontSize: 15),),
+                const Text('Editar', style: TextStyle(fontSize: 15),),
                 IconButton(
                   icon: const Icon(Icons.edit, color: Colors.deepPurple),
-                  onPressed: () => _showForm(context),  
+                  onPressed: () {
+                    categoryService.selectedCategory = categoryService.categorylist[index];
+                    Navigator.pushNamed(context, 'addCategory');
+                  },  
                 )
               ],),
             ),
@@ -87,8 +103,31 @@ class _CategoryName extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Column(children: [
-                const Text('Delete', style: TextStyle(fontSize: 15),),
-                IconButton(onPressed: (){}, icon: const Icon(Icons.delete, color: Colors.deepPurple,))
+                const Text('Ellimnar', style: TextStyle(fontSize: 15),),
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.deepPurple),
+                  onPressed: (){
+                  final dialog = AlertDialog(
+                      title: Text('¿Desea eliminar ${category.name}?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancelar')),
+                        TextButton(
+                          child: const Text('Borrar'),
+                          onPressed: () async {
+                            await categoryService.deleteCategory('${category.idcategory}');
+                            Navigator.of(context).pop();
+                            const CategoriesPage();
+                          },
+                        ),
+                      ]);
+                      showDialog(context: context, builder: (_) => dialog);
+                }, 
+                
+                )
               ],),
             ),
             Expanded(child: Container()),
@@ -164,9 +203,6 @@ class _CategoryName extends StatelessWidget {
         }
 
       );
-       
-    
     }
-    
 }
 

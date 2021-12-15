@@ -13,12 +13,12 @@ class DownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 33, left: 40),
+      padding: const EdgeInsets.only(right: 41, left: 55),
       child: IconButton(
         splashColor: Colors.deepPurpleAccent,
         iconSize: 37,
         icon: Icon(iconOption, color: Colors.deepPurple,),
-        onPressed: () => Navigator.pushNamed(context, route),
+        onPressed: () => Navigator.pushNamed(context, route)
       ),
     );
   }

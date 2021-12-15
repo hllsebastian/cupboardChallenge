@@ -1,4 +1,4 @@
-import 'package:cupboard/models/trademarks.dart';
+import 'package:cupboard/models/trademark_model.dart';
 import 'package:cupboard/services/trademark_service.dart';
 import 'package:cupboard/widgets/down_button.dart';
 import 'package:cupboard/widgets/sidebar.dart';
@@ -25,21 +25,37 @@ class TrademarksPage extends StatelessWidget {
           itemCount: trademarkService.trademarkslist.length,
           itemBuilder: (_, index) => _TrademarkName(
                 trademark: trademarkService.trademarkslist[index],
-          )
-      ),
+              )),
 
-      persistentFooterButtons: const [
-        DownButton(iconOption: Icons.home, route: '/'),
-        DownButton(iconOption: Icons.add, route: 'addBrand'),
-        DownButton(iconOption: Icons.close, route: 'login'),
+      /* floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: (){
+          trademarkService.selectedTrademark = TrademarkModel(
+            mark: '' 
+          );
+          Navigator.pushNamed(context, 'formProduct');
+        },
+      ), */
+
+      persistentFooterButtons: [
+        const DownButton(iconOption: Icons.home, route: '/'),
+        IconButton(
+            icon: const Icon(Icons.add),
+            color: Colors.deepPurple,
+            onPressed: () {
+              trademarkService.selectedTrademark = TrademarkModel(mark: '');
+              Navigator.pushNamed(context, 'addBrand');
+            }),
+
+        //DownButton(iconOption: Icons.add, route: 'addBrand'),
+        const DownButton(iconOption: Icons.close, route: 'login'),
       ],
     );
   }
 }
 
 class _TrademarkName extends StatelessWidget {
-
-  final Trademark trademark;
+  final TrademarkModel trademark;
 
   const _TrademarkName({
     Key? key,
@@ -48,7 +64,6 @@ class _TrademarkName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final trademarkService = Provider.of<TrademarkService>(context);
     final index = trademarkService.trademarkslist
         .indexWhere((x) => x.idTrademark == trademark.idTrademark);
@@ -64,18 +79,26 @@ class _TrademarkName extends StatelessWidget {
           children: [
             Padding(
                 padding: const EdgeInsets.only(bottom: 35, left: 10),
-                child: Text(trademark.mark, style: const TextStyle(fontSize: 22),
+                child: Text(
+                  trademark.mark,
+                  style: const TextStyle(fontSize: 22),
                 )),
             Expanded(child: Container()),
             Padding(
               padding: const EdgeInsets.only(top: 20),
               child: Column(
                 children: [
-                  const Text('Edite', style: TextStyle(fontSize: 15),),
+                  const Text(
+                    'Edite',
+                    style: TextStyle(fontSize: 15),
+                  ),
                   IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.deepPurple),
-                    onPressed: () => _showForm(context),
-                  )
+                      icon: const Icon(Icons.edit, color: Colors.deepPurple),
+                      onPressed: () {
+                        trademarkService.selectedTrademark = trademarkService.trademarkslist[index];
+                        Navigator.pushNamed(context, 'addBrand');
+                        const TrademarksPage();
+                      })
                 ],
               ),
             ),
@@ -93,7 +116,29 @@ class _TrademarkName extends StatelessWidget {
                       Icons.delete,
                       color: Colors.deepPurple,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      final dialog = AlertDialog(
+                          title: Text(
+                              '¿Esta seguro de eliminar ${trademark.mark}?'),
+                          actions: [
+                            TextButton(
+                              child: const Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: const Text('Sí'),
+                              onPressed: () async {
+                                await trademarkService.deleteTradeMark(
+                                    '${trademark.idTrademark}');
+                                Navigator.of(context).pop();
+                                const TrademarksPage();
+                              },
+                            ),
+                          ]);
+                      showDialog(context: context, builder: (_) => dialog);
+                    },
                   )
                 ],
               ),
@@ -103,71 +148,5 @@ class _TrademarkName extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  _showForm(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            title: const Text('Editing Category'),
-            content: Form(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                      color: Colors.deepPurple,
-                      width: 3,
-                    )),
-
-                    /*  enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.purple
-                        )
-                      ), */
-                    /*  border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)
-                      ), */
-                    labelStyle: TextStyle(color: Colors.black),
-                    labelText: 'New name',
-                    hintText: 'Insert new category name',
-                  ),
-                ),
-
-                /*  IconButton(
-                    onPressed: (){}, 
-                    icon:  const Icon(Icons.save, color: Colors.deepPurple)
-                  ) */
-              ],
-            )),
-            actions: [
-              TextButton(
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(color: Colors.purpleAccent),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              const SizedBox(
-                width: 60,
-              ),
-              TextButton(
-                child: const Text(
-                  'Save',
-                  style: TextStyle(color: Colors.purpleAccent),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              const SizedBox(
-                width: 30,
-              ),
-            ],
-          );
-        });
   }
 }

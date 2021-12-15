@@ -12,30 +12,25 @@ class TradeMarkForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final trademarkService = Provider.of<TrademarkService>(context);
 
     return ChangeNotifierProvider(
       create: (_) => TrademarkProvider(trademarkService.selectedTrademark),
-      child: TradeMarkFormContainer(markService: trademarkService),
+      child: TradeMarkFormContainer(trademarkService: trademarkService),
     );
   }
 }
 
-
-
 class TradeMarkFormContainer extends StatelessWidget {
+  final TrademarkService trademarkService;
 
-  final TrademarkService markService;
-
-  const TradeMarkFormContainer({ 
+  const TradeMarkFormContainer({
     Key? key,
-    required this.markService,
-   }) : super(key: key);
+    required this.trademarkService,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final tradeMarkForm = Provider.of<TrademarkProvider>(context);
     final tradeMark = tradeMarkForm.mark;
 
@@ -62,28 +57,29 @@ class TradeMarkFormContainer extends StatelessWidget {
                       'Nueva Marca',
                       style: Theme.of(context).textTheme.headline4,
                     ),
-                    const _ProductForm(titlefield: 'Nombre de la marca'),
-                    /* const _ProductForm(
+                    const _TradeMarkForm(titlefield: 'Nombre de la marca'),
+                    /* const _TradeMarkForm(
                       titlefield: 'Nombre de la marca',
                     ), */
                   ],
                 ),
               ),
               const SizedBox(height: 80),
-              
               TextButton.icon(
-                //style: ButtonStyle(backgroundColor:  ),
-                icon: const Icon(Icons.save_outlined,size: 45, color: Colors.deepPurple),
-                label: const Text('Guardar', style: TextStyle(color: Colors.black54, fontSize: 26)),
-                onPressed: markService.isSaving 
-                          ? null
-                          : () async {
-                            if(!tradeMarkForm.isValidForm()) return;
-                            await markService.saveOrCreateMark(tradeMark);
-                            Navigator.of(context).pop();
-                          } 
-
-              ),
+                  //style: ButtonStyle(backgroundColor:  ),
+                  icon: const Icon(Icons.save_outlined,
+                      size: 45, color: Colors.deepPurple),
+                  label: const Text('Guardar',
+                      style: TextStyle(color: Colors.black54, fontSize: 26)),
+                  onPressed: /* trademarkService.isSaving
+                      ? null
+                      :  */
+                      () async {
+                    /* if (tradeMarkForm.isValidForm()) return; */
+                    await trademarkService.saveOrCreateMark(tradeMark);
+                    Navigator.of(context).pop();
+                    const TradeMarkForm();
+                  }),
               const SizedBox(
                 height: 30,
               ),
@@ -112,38 +108,35 @@ class TradeMarkFormContainer extends StatelessWidget {
   }
 }
 
-class _ProductForm extends StatelessWidget {
-
+class _TradeMarkForm extends StatelessWidget {
   final String titlefield;
-  
-  const _ProductForm({Key? key, required this.titlefield})
-      : super(key: key);
+
+  const _TradeMarkForm({Key? key, required this.titlefield}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final trademarkForm = Provider.of<TrademarkProvider>(context);
     final newTrademark = trademarkForm.mark;
 
     // ignore: avoid_unnecessary_containers
     return Form(
-      key: trademarkForm.formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: Column(
-      children: [
-        TextFormField(
-          keyboardType: TextInputType.text,
-          autocorrect: false,
-          decoration: _formStyle(),
-          onChanged: (value) => newTrademark.mark = value,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Ingresa una categoria para guardar';
-            }
-          },
-        )
-      ],
-    ));
+        key: trademarkForm.formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          children: [
+            TextFormField(
+              keyboardType: TextInputType.text,
+              autocorrect: false,
+              decoration: _formStyle(),
+              onChanged: (value) => newTrademark.mark = value,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Ingresa una categoria para guardar';
+                }
+              },
+            )
+          ],
+        ));
   }
 
   InputDecoration _formStyle() {
@@ -158,5 +151,3 @@ class _ProductForm extends StatelessWidget {
     );
   }
 }
-
-

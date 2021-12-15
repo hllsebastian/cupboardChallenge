@@ -4,14 +4,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'package:cupboard/models/trademarks.dart';
+import 'package:cupboard/models/trademark_model.dart';
 
 
 class TrademarkService extends ChangeNotifier {
 
   final storage = const FlutterSecureStorage();
-  final List<Trademark> trademarkslist = [];
-  late Trademark selectedTrademark;
+  final List<TrademarkModel> trademarkslist = [];
+  late TrademarkModel selectedTrademark;
   bool isLoading = true;
   bool isSaving = true;
 
@@ -20,7 +20,7 @@ class TrademarkService extends ChangeNotifier {
     loadTrademarks();
   }
 
-  Future<List<Trademark>> loadTrademarks() async {
+  Future<List<TrademarkModel>> loadTrademarks() async {
     isLoading = true;
     notifyListeners();
 
@@ -39,7 +39,7 @@ class TrademarkService extends ChangeNotifier {
 
     // ignore: avoid_function_literals_in_foreach_calls
     trademarksMap.forEach((mark) {
-      final tempTrademark = Trademark.fromMap(mark);
+      final tempTrademark = TrademarkModel.fromMap(mark);
       trademarkslist.add(tempTrademark);
     });
 
@@ -48,7 +48,7 @@ class TrademarkService extends ChangeNotifier {
     return trademarkslist;
   }
 
-  Future saveOrCreateMark(Trademark trademark) async {
+  Future saveOrCreateMark(TrademarkModel trademark) async {
       // creando
     isSaving = true;
     notifyListeners();
@@ -60,7 +60,7 @@ class TrademarkService extends ChangeNotifier {
     }
   }
 
-  Future<String?> createMark(Trademark trademark) async {
+  Future<String?> createMark(TrademarkModel trademark) async {
 
     final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks');
     final token = await storage.read(key: 'token');
@@ -83,7 +83,7 @@ class TrademarkService extends ChangeNotifier {
   }
 
 
-  Future<String?> updateMark(Trademark trademark) async {
+  Future<String?> updateMark(TrademarkModel trademark) async {
 
     final url = Uri.parse('https://10.0.2.2:5001/api/Trademarks/${trademark.idTrademark}');
     final token = await storage.read(key: 'token');
